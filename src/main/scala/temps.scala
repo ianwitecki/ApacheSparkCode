@@ -5,7 +5,7 @@ object TempAnalysis {
 
 def main(args:Array[String]): Unit = {
 
-val source = io.Source.fromFile("/users/mlewis/CSCI1320-S17/SanAntonioTemps.csv")
+val source = scala.io.Source.fromFile("/users/mlewis/CSCI1320-S17/SanAntonioTemps.csv")
 val lines = source.getLines.drop(2)
 val tempData = lines.map { line => 
         val p = line.split(",")
