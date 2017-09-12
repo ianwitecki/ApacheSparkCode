@@ -24,5 +24,5 @@
 
 7.
 
-![alt text](images/graphIn1.png *Graph of Temp over Time*)
+![alt text](/images/graphIn1.png)
 

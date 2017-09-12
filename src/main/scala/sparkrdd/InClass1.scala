@@ -47,7 +47,7 @@ object InClass1 extends JFXApp {
         //val stationIntersect = texasCodes.intersection(dataStations)
         println("Texas Stations Reporting Data: " + dailyTexas.map(a => a.station).distinct().count())
 
-      /*  
+        
         //Highest Reported Temperature
         val hottestDay = data2017.filter(_.element == "TMAX").reduce((a, b) => if (b.value > a.value) b else a)
         val location = stations.filter(a => a.station == hottestDay.station).collect
@@ -71,9 +71,9 @@ object InClass1 extends JFXApp {
         val indianRainfall =  data2017.filter(_.station.substring(0,2) == "IN").reduce { (a,b) => 
                 if (b.element == "PRCP" && b.value> a.value) b else a}
         println("Indian Maximum Rainfall: " + indianRainfall.value + " on " + indianRainfall.date + " at station " + indianRainfall.station) 
-*/
+
         //Weather Stations Associated with San Antonio
-/*
+
         val sanAntonStations = texasStations.filter(_.name.contains("SAN ANTONIO")).map(a => a.station).collect.toArray.toSet
         println("San Antonio Stations: " + sanAntonStations.size)
         
@@ -104,11 +104,8 @@ object InClass1 extends JFXApp {
 
         val coral = ((acc * xy) - (x * y))/Math.sqrt(((acc * x2) - (x * x))*((acc * y2) - (y * y)))
         println(coral)
-*/
+
         //That Graph 
-        
-        //Sugarloaf Mtn USS0046M04S
-        
         
        
 
