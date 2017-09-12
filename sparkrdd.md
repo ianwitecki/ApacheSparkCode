@@ -16,7 +16,7 @@
 
 3. 29 San Antonio Stations
 
-4. 12 San Antonio Stations reported Data in 2017
+4. 4 San Antonio Stations reported Temperature Data in 2017
 
 5. 122 (tenths of degrees celsius)
 

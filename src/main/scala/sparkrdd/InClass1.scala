@@ -4,6 +4,7 @@ import scalafx.scene.Scene
 import scalafx.scene.chart.ScatterChart
 import scalafx.scene.chart.NumberAxis
 import scalafx.scene.chart.XYChart
+import scalafx.scene.layout.TilePane
 import scalafx.collections.ObservableBuffer
 import scala.collection.immutable.Set
 import org.apache.spark._
@@ -149,12 +150,13 @@ object InClass1 extends JFXApp {
 
                         val chart5Data = data2017.filter(a => a.element == "TMAX" && a.station == "CI000085799").collect.map(a => XYChart.Data[Number, Number](datify(a.date.toString), a.value/10)).toSeq 
                         val chart5 = XYChart.Series[Number,Number]("CI000085799", ObservableBuffer(chart5Data))
-                        
 
-                        val sc = new ScatterChart(dateAxis, tempAxis, ObservableBuffer(chart1, chart2, chart3, chart4, chart5))
-                        sc.setTitle("Temperature by the Day of Year")
-                        sc.legendVisible = false
-                        content = sc
+                        val scat = new ScatterChart(dateAxis, tempAxis, ObservableBuffer(chart1, chart2, chart3, chart4, chart5))
+                        val pane = new TilePane
+                        pane.children = List(scat)
+                        scat.setTitle("Temperature by the Day of Year")
+                        scat.legendVisible = true
+                        root = pane
                 }
 
         }
