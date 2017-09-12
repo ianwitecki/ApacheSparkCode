@@ -1,7 +1,7 @@
 import scalafx.application.JFXApp
 import scalafx.Includes._
 import scalafx.scene.Scene
-import scalafx.scene.chart.LineChart
+import scalafx.scene.chart.ScatterChart
 import scalafx.scene.chart.NumberAxis
 import scalafx.scene.chart.XYChart
 import scalafx.collections.ObservableBuffer
@@ -105,9 +105,10 @@ object InClass1 extends JFXApp {
         val coral = ((acc * xy) - (x * y))/Math.sqrt(((acc * x2) - (x * x))*((acc * y2) - (y * y)))
         println(coral)
 */
-        //That Fucking Graph 
+        //That Graph 
         
         //Sugarloaf Mtn USS0046M04S
+        
         
        
 
@@ -137,22 +138,30 @@ object InClass1 extends JFXApp {
                         dateAxis.label = "Day of the Year"
                         val tempAxis = new NumberAxis(-20, 45, 1)
                         tempAxis.label = "Temperature"
-                        val chart1Data = data2017.filter(a => a.element == "TMAX" && a.station == "USW00012917").collect.map(a => XYChart.Data[Number, Number](datify(a.date.toString), a.value/10)).toSeq 
-                        val chart1 = XYChart.Series[Number,Number]("USW00012917", ObservableBuffer(chart1Data))
-                        val chart2Data = data2017.filter(a => a.element == "TMAX" && a.station == "IN017111200").collect.map(a => XYChart.Data[Number, Number](datify(a.date.toString), a.value/10)).toSeq 
-                        val chart2 = XYChart.Series[Number,Number]("IN017111200", ObservableBuffer(chart2Data))
+                        val chart1Data = data2017.filter(a => a.element == "TMAX" && a.station == "RSM00028573").collect.map(a => XYChart.Data[Number, Number](datify(a.date.toString), a.value/10)).toSeq 
+                        val chart1 = XYChart.Series[Number,Number]("RSM00028573", ObservableBuffer(chart1Data))
 
+                        val chart2Data = data2017.filter(a => a.element == "TMAX" && a.station == "USC00414968").collect.map(a => XYChart.Data[Number, Number](datify(a.date.toString), a.value/10)).toSeq 
+                        val chart2 = XYChart.Series[Number,Number]("USC00414968", ObservableBuffer(chart2Data))
+
+                        val chart3Data = data2017.filter(a => a.element == "TMAX" && a.station == "USC00205591").collect.map(a => XYChart.Data[Number, Number](datify(a.date.toString), a.value/10)).toSeq 
+                        val chart3 = XYChart.Series[Number,Number]("USC00205591", ObservableBuffer(chart3Data))
+
+                        val chart4Data = data2017.filter(a => a.element == "TMAX" && a.station == "ASN00030022").collect.map(a => XYChart.Data[Number, Number](datify(a.date.toString), a.value/10)).toSeq 
+                        val chart4 = XYChart.Series[Number,Number]("ASN00030022", ObservableBuffer(chart4Data))
+
+                        val chart5Data = data2017.filter(a => a.element == "TMAX" && a.station == "CI000085799").collect.map(a => XYChart.Data[Number, Number](datify(a.date.toString), a.value/10)).toSeq 
+                        val chart5 = XYChart.Series[Number,Number]("CI000085799", ObservableBuffer(chart5Data))
                         
 
-                        val sc = new LineChart(dateAxis, tempAxis, ObservableBuffer(chart1, chart2))
+                        val sc = new ScatterChart(dateAxis, tempAxis, ObservableBuffer(chart1, chart2, chart3, chart4, chart5))
                         sc.setTitle("Temperature by the Day of Year")
                         sc.legendVisible = false
-                        sc.minHeight_= 600
-                        sc.minWidth_ = 750
                         content = sc
                 }
 
         }
+        sc.stop()
 }
 
                 
