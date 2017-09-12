@@ -23,5 +23,6 @@
 6. The correlation coefficient is -0.13115
 
 7.
-        ![alt text](https://github.com/CSCI3395-F17/daily-code-ianwitecki/blob/master/images/graphIn1.png *Graph of Temp over Time*)
+
+![alt text](images/graphIn1.png *Graph of Temp over Time*)
 
