@@ -23,5 +23,5 @@
 6. The correlation coefficient is -0.13115
 
 7.
-        ![Temperature Graph](images/graphIn1.png *Graph of Temp over Time*)
+        ![alt text](images/graphIn1.png *Graph of Temp over Time*)
 
