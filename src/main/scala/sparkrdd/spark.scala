@@ -1,3 +1,4 @@
+package sparkrdd
 import scalafx.application.JFXApp
 import scalafx.Includes._
 import scalafx.scene.Scene
@@ -163,7 +164,4 @@ object InClass1 extends JFXApp {
         sc.stop()
 }
 
-                
-
-
-
+ 

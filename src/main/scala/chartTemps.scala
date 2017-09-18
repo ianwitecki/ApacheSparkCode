@@ -10,7 +10,7 @@ import scalafx.collections.ObservableBuffer
 
 
 object TempChart extends JFXApp {
-        val source = io.Source.fromFile("/users/mlewis/CSCI1320-S17/SanAntonioTemps.csv")
+        val source = scala.io.Source.fromFile("/users/mlewis/CSCI1320-S17/SanAntonioTemps.csv")
         val lines = source.getLines.drop(2)
         val tempData = lines.map { line =>
         val p = line.split(",")
