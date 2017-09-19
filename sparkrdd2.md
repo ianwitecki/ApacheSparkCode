@@ -11,7 +11,7 @@
 4. 13003 stations reported data in both 1987 and 2017.
 
 ## Out of Class Work
-1.
+1. Question 1
   1. The standard deviation of high temperatures in the US with latitude under 35 is 7.7 degrees celsius
      The standard deviation of high temperatures in the US with latitude between 35 and 42 is 10.8 degrees celsius
      The standard deviation of high temperatures in the US with latitude above 42 is 12.6 degrees celsius
@@ -20,10 +20,9 @@
      The standard deviation of average temperatures in the US with latitude between 35 and 42 is 9.9 degrees celsius
      The standard deviation of average temperatures in the US with latitude above 42 35 is 11.3 degrees celsius
 
-  1.
-     The standard deviation of high temperatures in the US with latitude under 35
+  1. The standard deviation of high temperatures in the US with latitude under 35
 
-     ![alt text](/images/tempsUnder35.png)
+     ![alt text](/images/tempsUnder35)
 
      The standard deviation of high temperatures in the US with latitude between 35 and 42
 
@@ -38,18 +37,18 @@
 
    ![alt text](/images/TempByLocation.png)
 
-1.
+1. Question 2
   1. The average temperature in 1897 for all stations was 10.7 degrees celsius
      The average temperature in 2016 for all stations was 11.7 degrees celsius
 
   1. The average temperature in 1897 for all stations reporting temperature data was 10.6 degrees celsius
      The average temperature in 2016 for all stations reporting temperature data was 12.1 degrees celsius
 
-  1.Average Temperature from 1897 to 2017
+  1. Average Temperature from 1897 to 2017
 
     ![alt text](/images/AverageTempByYearA.png)
 
-  1.Average Temperature from 1897 to 2017 from all the same temperature reporting stations
+  1.  Average Temperature from 1897 to 2017 from all the same temperature reporting stations
 
     ![alt text](/images/AverageTempByYearB.png)
 
