@@ -12,45 +12,45 @@
 
 ## Out of Class Work
 1. Question 1
-  1. The standard deviation of high temperatures in the US with latitude under 35 is 7.7 degrees celsius
-     The standard deviation of high temperatures in the US with latitude between 35 and 42 is 10.8 degrees celsius
-     The standard deviation of high temperatures in the US with latitude above 42 is 12.6 degrees celsius
+    1. The standard deviation of high temperatures in the US with latitude under 35 is 7.7 degrees celsius
+       The standard deviation of high temperatures in the US with latitude between 35 and 42 is 10.8 degrees celsius
+       The standard deviation of high temperatures in the US with latitude above 42 is 12.6 degrees celsius
 
-  1. The standard deviation of average temperatures in the US with latitude under 35 is 7.6 degrees celsius
-     The standard deviation of average temperatures in the US with latitude between 35 and 42 is 9.9 degrees celsius
-     The standard deviation of average temperatures in the US with latitude above 42 35 is 11.3 degrees celsius
+    1. The standard deviation of average temperatures in the US with latitude under 35 is 7.6 degrees celsius
+       The standard deviation of average temperatures in the US with latitude between 35 and 42 is 9.9 degrees celsius
+       The standard deviation of average temperatures in the US with latitude above 42 35 is 11.3 degrees celsius
 
-  1. The standard deviation of high temperatures in the US with latitude under 35
+    1. The standard deviation of high temperatures in the US with latitude under 35
 
-     ![alt text](/images/tempsUnder35)
+        ![alt text](/images/tempsUnder35)
 
-     The standard deviation of high temperatures in the US with latitude between 35 and 42
+       The standard deviation of high temperatures in the US with latitude between 35 and 42
 
-     ![alt text](/images/tempsBetween.png)
+       ![alt text](/images/tempsBetween)
 
-     The standard deviation of high temperatures in the US with latitude above 42
+       The standard deviation of high temperatures in the US with latitude above 42
 
-     ![alt text](/images/tempsAbove42.png)
+       ![alt text](/images/tempsAbove42)
 
 
 1. The average high temperature for every station that has reported temperature data in 2017.
 
-   ![alt text](/images/TempByLocation.png)
+   ![alt text](/images/TempByLocation)
 
 1. Question 2
-  1. The average temperature in 1897 for all stations was 10.7 degrees celsius
-     The average temperature in 2016 for all stations was 11.7 degrees celsius
+    1. The average temperature in 1897 for all stations was 10.7 degrees celsius
+       The average temperature in 2016 for all stations was 11.7 degrees celsius
 
-  1. The average temperature in 1897 for all stations reporting temperature data was 10.6 degrees celsius
-     The average temperature in 2016 for all stations reporting temperature data was 12.1 degrees celsius
+    1. The average temperature in 1897 for all stations reporting temperature data was 10.6 degrees celsius
+       The average temperature in 2016 for all stations reporting temperature data was 12.1 degrees celsius
 
-  1. Average Temperature from 1897 to 2017
+    1. Average Temperature from 1897 to 2017
 
-    ![alt text](/images/AverageTempByYearA.png)
+      ![alt text](/images/AverageTempByYearA)
 
-  1.  Average Temperature from 1897 to 2017 from all the same temperature reporting stations
+    1. Average Temperature from 1897 to 2017 from all the same temperature reporting stations
 
-    ![alt text](/images/AverageTempByYearB.png)
+      ![alt text](/images/AverageTempByYearB)
 
 1. The benefit of checking for stations that are reporting weather data throughout the years is that you get consistent locations and the same number of temperatures to pull an average from. This means that every average is equally as accurate as the others.  However, the other method is more accurate for each year because there is more data per year.
 

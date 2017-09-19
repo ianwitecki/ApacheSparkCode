@@ -91,7 +91,7 @@ object SpecialRDDs extends JFXApp {
         val latLow = stations.filter(_.lat < 35).map(a => (a.station) -> a).join(tempsByStat).map{case (stat, (a, b)) => b}.filter(a => a.element == "TMAX" || a.element == "TMIN")
         val latMid = stations.filter(a => a.lat > 35 && a.lat < 42).map(a => (a.station) -> a).join(tempsByStat).map{case (stat, (a, b)) => b}.filter(a => a.element == "TMAX" || a.element == "TMIN")
         val latHigh = stations.filter(_.lat > 42).map(a => (a.station) -> a).join(tempsByStat).map{case (stat, (a, b)) => b}.filter(a => a.element == "TMAX" || a.element == "TMIN")
-/*        println("High Temperature Standard Deviation for US with latitude under 35: " + standardDev(latLow.filter(_.element == "TMAX")))
+        println("High Temperature Standard Deviation for US with latitude under 35: " + standardDev(latLow.filter(_.element == "TMAX")))
         println("High Temperature Standard Deviation for US with latitude betwee 35 and 42: " + standardDev(latMid.filter(_.element == "TMAX")))
         println("High Temperature Standard Deviation for US with latitude above 42: " + standardDev(latHigh.filter(_.element == "TMAX")))
 
@@ -100,7 +100,7 @@ object SpecialRDDs extends JFXApp {
         println("Average Temp Standard Deviation for US with latitude under 35: " + standardDev(averageTemps(latLow, true)))
         println("Average Temp Standard Deviation for US with latitude betwee 35 and 42: " + standardDev(averageTemps(latMid, true)))
         println("Average Temp Standard Deviation for US with latitude above 42: " + standardDev(averageTemps(latHigh, true)))
-*/
+
           //C
 
         latHistPlots(latLow.filter(a => a.element == "TMAX").map(_.value), "High Temperatures from Latitudes under 35")
@@ -113,7 +113,7 @@ object SpecialRDDs extends JFXApp {
           val plot = Plot.histogramPlot(bins, hist, RedARGB, false, title, "Temperature", "Count")
           FXRenderer(plot)
         }
-/*
+
       // PROBLEM 2
       val ave2017 = averageTemps(data2017, false).map(a => a.station -> a).join(stations.map(a => a.station -> (a.lat, a.long)))
       val latvals = ave2017.map{ case (station, (data, location)) => ( data.value, location._1, location._2)}
@@ -222,7 +222,7 @@ object SpecialRDDs extends JFXApp {
         }
 
 
-*/
+
 
         def standardDev(rdd : RDD[DataDay]) : Double = {
           val tempCounts = rdd.aggregate(0.0, 0.0)/*(sum, count)*/(
