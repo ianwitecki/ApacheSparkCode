@@ -103,12 +103,14 @@ ON q.quizid = c.quizid
 GROUP BY q.quizid, c.question_type) nums;
 
 /*QUESTION 10*/
-SELECT userid, MAX(c)
+SELECT userid, MAX(c) attempts
 FROM
 (SELECT userid, quizid, COUNT(quizid) AS c
 FROM code_answers
 GROUP BY userid, quizid) attempts
-GROUP BY userid;
+GROUP BY userid
+ORDER BY attempts DESC
+LIMIT 1;
 
 
 
