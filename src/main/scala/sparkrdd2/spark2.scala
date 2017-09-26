@@ -25,7 +25,7 @@ object SpecialRDDs extends JFXApp {
 
         Logger.getLogger("org").setLevel(Level.OFF)
 
-        val conf = new SparkConf().setAppName("Sample Application").setMaster("local[*]")
+        val conf = new SparkConf().setAppName("Sample Application")
         val sc = new SparkContext(conf)
 
         val lines2016 = sc.textFile("/users/mlewis/CSCI3395-F17/data/ghcn-daily/2016.csv")
@@ -212,8 +212,8 @@ object SpecialRDDs extends JFXApp {
 
         def problem3A(rdd : RDD[DataDay]) : Double = {
             val totalAve = rdd.aggregate((0.0, 0.0))({ case ((sum, count), a) =>  (sum + a.value, count +1)}, ((x,y) => (x._1 + y._1, x._2 + y._2)))
-      //      (totalAve._1/totalAve._2)
-      //    }
+            (totalAve._1/totalAve._2)
+          }
 
         def problem3B(rdd: RDD[DataDay], statList: Set[String]): Double = {
             val filteredRdd = rdd.filter(a => statList.contains(a.station))
