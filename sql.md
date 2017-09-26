@@ -4,7 +4,7 @@
 
 2. The 5th section of CSCI1320 in the Fall of 2016 had the most quiz questions with 68 questions.  
 
-3. Out of the 1101 function question attempts, there have been 783 right answers. 
+3. Out of the 162 students to attempt a function question, 134 of them have gotten one right.
 
 4. 9 courses have given questions of the lambda type.
 

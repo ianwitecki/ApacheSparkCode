@@ -28,6 +28,15 @@ LIMIT 1;
 
 
 /*QUESTION 3*/
+SELECT uc.users_with_correct_answers, ua.users_with_attempts
+FROM 
+(SELECT COUNT(DISTINCT userid) AS users_with_correct_answers FROM code_answers WHERE question_type = 1 AND correct = 1) uc, 
+(SELECT COUNT(DISTINCT userid) AS users_with_attempts FROM code_answers WHERE question_type = 1) ua;
+
+
+
+
+/*CODE FOR QUESTION 3 THAT IS INTERESTING BUT NOT RELEVANT
 SELECT COUNT(question_id) correct_answers 
 FROM code_answers
 WHERE question_type = 1
@@ -39,7 +48,7 @@ FROM
 (SELECT COUNT(DISTINCT question_id) answers
 FROM code_answers
 WHERE question_type = 1
-GROUP BY userid) a;
+GROUP BY userid) a;*/
 
 
 /*QUESTION 4*/
