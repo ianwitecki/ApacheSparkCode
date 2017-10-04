@@ -6,16 +6,16 @@
 1. The BLS tracks 14320 citys/towns in New Mexico.
 1. Average Unemployment Rate for New Mexico in 2017
     1. By Month
-       | Month  | Average Value |
-       |---|---|
+       | Month      | Average Value    |
+       |------------|------------------|
        |   February | 7.463636363636364|
-       |   August |              6.35|
-       |   July |7.2409090909090885|
-       |   June | 7.027272727272727|
-       |   May  | 6.387878787878788|
-       |   April| 6.580303030303029|
-       |   March | 6.984848484848484|
-       |   Janruary| 7.348484848484849|
+       |   August   |              6.35|
+       |   July     |7.2409090909090885|
+       |   June     | 7.027272727272727|
+       |   May      | 6.387878787878788|
+       |   April    | 6.580303030303029|
+       |   March    | 6.984848484848484|
+       |   Janruary | 7.348484848484849|
 
     1. The simple average by counties of the state was 7.001%.
 
