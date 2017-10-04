@@ -21,7 +21,7 @@ object SparkSql extends JFXApp{
     Logger.getLogger("org").setLevel(Level.OFF)
       
 
-    val spark = SparkSession.builder().master("spark://pandora00:7077").getOrCreate()
+    val spark = SparkSession.builder().master("local[*]").getOrCreate()
     import spark.implicits._
     
     spark.sparkContext.setLogLevel("WARN")
@@ -65,10 +65,11 @@ object SparkSql extends JFXApp{
     val allStates = spark.read.schema(schema).option("header", true).option("delimiter", "\t").csv("/data/BigData/bls/la/la.data.concatenatedStateFiles")
     
     val regions = spark.read.schema(schemaSeries).option("header", true).option("delimiter", "\t").csv("/data/BigData/bls/la/la.series")
+    val originMaps = spark.read.schema(schemaZip).option("header", true).option("delimiter", ",").csv("/data/BigData/bls/zip_codes_states.csv")
 
-    val maps = spark.read.schema(schemaZip).option("header", true).option("delimiter", ",").csv("/data/BigData/bls/zip_codes_states.csv")
+        val maps = originMaps.groupBy('county, 'state).agg(avg('lat) as "lat" , avg('long) as "long")
 
-
+        maps.show()
 //IN CLASS 
     //1
 /*    println(data.select('seriesID).distinct().count())
@@ -97,7 +98,7 @@ object SparkSql extends JFXApp{
    /*The wieghted average is less than the other two averages, however the weighted average is more accurate becuase it accounts for the population of the labor force. This makes it so that if there was a 30 percent unemployment rate in a town of 20 people it would mean far less than it would in a regular average. */
 
    //2
-   
+/*   
     val texaslf = texas.filter(substring('seriesID, 19, 2) === "06")
     .withColumn("seriesID", substring('seriesID, 0, 19)).withColumnRenamed("value", "lf")
     texas.filter(substring('seriesID, 19, 2) === "03")
@@ -105,7 +106,7 @@ object SparkSql extends JFXApp{
     .join(texaslf,Seq("seriesID", "period", "year")) 
     .filter('lf >= 10000)
     .orderBy(desc("value")).limit(1)show()
-   
+  */ 
    //3
 
    allStates.createOrReplaceTempView("allD")
@@ -177,13 +178,13 @@ object SparkSql extends JFXApp{
 
    vals1.take(5) foreach println
 
-   val cg = ColorGradient(0.0 -> WhiteARGB, 5.0 -> GreenARGB, 10.0 -> RedARGB, 50.0 -> BlackARGB)
+   val cg = ColorGradient((0.0, WhiteARGB), (5.0, GreenARGB), (10.0, RedARGB), (50.0, BlackARGB))
 
     val plot = Plot.scatterPlotGrid(
-        Seq(Seq((lat1, long1, vals1.map(cg), 5), (lat2, long2, vals2.map(cg), 5)),
-            Seq((lat3, long3, vals3.map(cg), 5), (lat4, long4, vals4.map(cg), 5))),
+        Seq(Seq((long1, lat1, vals1.map(cg), 5), (long2, lat2, vals2.map(cg), 5)),
+            Seq((long3, lat3, vals3.map(cg), 5), (long4, lat4, vals4.map(cg), 5))),
         "Plot Grid", "Latitude", "Longitude")
-    FXRenderer(plot, 800, 800)
+    FXRenderer(plot, 1000, 1000)
 
     spark.stop()
 

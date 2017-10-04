@@ -34,5 +34,8 @@
 
 1. The state with the most distinct series is Maine with 2,296 distinct series IDs.
 
-1. Working on it
-                                                                                                                         
+1. Below are the four unemployment rate graphs for 2000, 2005, 2010, and 2015.
+
+![alt text](/images/unemploymentByYear)
+
+                                                                                     
