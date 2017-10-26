@@ -44,7 +44,6 @@ object SparkML extends App{
   
   var varNames = cols.map(tuple => tuple._2)
 
-  cols.take(5) foreach println
 
   var data = cdcLines.map{ line =>
                 Row(cols.map{ col =>
@@ -63,7 +62,7 @@ object SparkML extends App{
   var dataF = spark.createDataFrame(data, dataSchema)
 
 //In Class Problems
- /* 
+/*  
   println("GENHLTH \n")
   dataF.describe("GENHLTH").show()
 
@@ -81,8 +80,8 @@ object SparkML extends App{
 
   println("SLEPTIM1 \n")
   dataF.describe("SLEPTIM1").show()
-*/
-  
+
+*/  
 //Out of Class Problems
 
   var dataArr = cdcLines.map{ line =>
@@ -98,20 +97,64 @@ object SparkML extends App{
  val vectorData = dataArr.map(arr => Vectors.dense(arr))
  val corrMatrix = Statistics.corr(vectorData, "pearson")
 
- val genHealthRelated = correlatedFields("MENTHLTH")
+ val genHealthRelated = correlatedFields("GENHLTH", 0.1)
+ val physHealthRelated = correlatedFields("PHYSHLTH", 0.1)
+ val mentHealthRelated = correlatedFields("MENTHLTH", 0.1)
+ val poorHealthRelated = correlatedFields("POORHLTH", 0.1)
 
+println("CORRELATED FIELDS BELOW")
+
+println("General Health")
  genHealthRelated foreach println       
+println("Physical Health")
+ physHealthRelated foreach println       
+println("Mental Health")
+ mentHealthRelated foreach println       
+println("Poor Health")
+ poorHealthRelated foreach println       
+println()
+println("General Health")
+println(genHealthRelated(1) + " " + genHealthRelated(2))
+println("Physical Health")
+println(physHealthRelated(1) + " " + physHealthRelated(2))
+println("Mental Health")
+println(mentHealthRelated(1) + " " + mentHealthRelated(2))
+println("Poor Health")
+println(poorHealthRelated(1) + " " + poorHealthRelated(2))
+//linReg("GENHLTH", genHealthRelated)
+//linReg("PHYSHLTH", physHealthRelated)
+//linReg("MENTHLTH", mentHealthRelated)
+//linReg("POORHLTH", poorHealthRelated)
 
-def correlatedFields(name: String):ListBuffer[String] = {
+def correlatedFields(name: String, minCorr: Double):ListBuffer[String] = {
         val colIndex = varNames.indexOf(name)
         val correlated = new ListBuffer[String]()
 
         for (i <- 0 until varNames.size) {
-                if (corrMatrix.apply(i, colIndex) > 0.06 && corrMatrix.apply(i, colIndex) != 1.0) {
+                if (corrMatrix.apply(i, colIndex) > minCorr && corrMatrix.apply(i, colIndex) != 1.0) {
                         correlated += varNames(i)
                 }
         }
         correlated
+}
+
+def linReg(focus: String, mainCorrs: ListBuffer[String]) {
+        println(focus)
+          val va = new VectorAssembler().setInputCols(Array(mainCorrs(1), mainCorrs(2)))
+                .setOutputCol("features")
+        val withFeatures = va.transform(dataF)
+        //withFeatures.show
+      
+  val lr = new LinearRegression().setLabelCol(focus)
+  
+  val model = lr.fit(withFeatures)
+  
+  //println(model.coefficients+" "+model.intercept)
+  
+  val fitData = model.transform(withFeatures)
+  fitData.describe("prediction").show()
+
+
 }
   
   
