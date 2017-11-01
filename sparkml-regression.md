@@ -1,4 +1,4 @@
-# Spark Sql Assignment  
+# Spark Ml Regression Assignment  
 
 ## In Class Questions
 1. Below are the description of the required columns.
