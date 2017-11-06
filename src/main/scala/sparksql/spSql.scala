@@ -72,7 +72,7 @@ object SparkSql extends JFXApp{
         maps.show()
 //IN CLASS 
     //1
-/*    println(data.select('seriesID).distinct().count())
+    println(data.select('seriesID).distinct().count())
     //2
     data.filter(substring('seriesID, 19, 2) === "04").orderBy(desc("value")).limit(1).show()
 
@@ -93,12 +93,12 @@ object SparkSql extends JFXApp{
     .join(laborForce,Seq("seriesID", "period")) 
     .agg(sum('value * 'lf) / sum('lf)).show()
 
-*/  
+  
    //1B
    /*The wieghted average is less than the other two averages, however the weighted average is more accurate becuase it accounts for the population of the labor force. This makes it so that if there was a 30 percent unemployment rate in a town of 20 people it would mean far less than it would in a regular average. */
 
    //2
-/*   
+   
     val texaslf = texas.filter(substring('seriesID, 19, 2) === "06")
     .withColumn("seriesID", substring('seriesID, 0, 19)).withColumnRenamed("value", "lf")
     texas.filter(substring('seriesID, 19, 2) === "03")
@@ -106,15 +106,15 @@ object SparkSql extends JFXApp{
     .join(texaslf,Seq("seriesID", "period", "year")) 
     .filter('lf >= 10000)
     .orderBy(desc("value")).limit(1)show()
-  */ 
+  
    //3
 
    allStates.createOrReplaceTempView("allD")
 
-  // spark.sql("select seriesID, period, year, value from allD, (select substring(seriesID, 0, 19) as f from allD where substring(seriesID, 19, 2) == '06' and value > 10000) as labor where substring(seriesID, 0, 19) == labor.f and substring(seriesID, 19, 2) == '03' order by value desc limit 1").show()
+   spark.sql("select seriesID, period, year, value from allD, (select substring(seriesID, 0, 19) as f from allD where substring(seriesID, 19, 2) == '06' and value > 10000) as labor where substring(seriesID, 0, 19) == labor.f and substring(seriesID, 19, 2) == '03' order by value desc limit 1").show()
 
   //4
- // regions.groupBy('srd).count().orderBy(desc("count")).limit(1)show(); 
+  regions.groupBy('srd).count().orderBy(desc("count")).limit(1)show(); 
 
   //5
   val recentYears = allStates.filter(substring('seriesID, 6, 2) =!= "72" && substring('seriesID, 6, 2) =!= "02" && substring('seriesID, 6, 2) =!= "15" && substring('seriesID, 19, 2) === "03")
