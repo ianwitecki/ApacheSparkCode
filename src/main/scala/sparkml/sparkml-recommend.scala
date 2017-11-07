@@ -44,31 +44,36 @@ object SparkRecommend extends App {
   val movies = spark.read.schema(movieTitleSchema).option("header", true).option("delimiter", ",").csv("/data/BigData/Netflix/movie_titles.csv")
 
 
-  //val testData = rating.filter($"movieid" <= 1000)
+  val testData = rating.filter($"movieid" <= 1000)
 
 //IN CLASS
 
-  //Question 1 & Question 2 - Range and Count of User Ids
+  //Question 1 Range of user ids
 
-  //testData.describe("userid").show() 
+  testData.describe("userid").show() 
+
+  //Question 2 Count of distinct user ids
+
+  println(testData.select("userid").distinct().count()) 
+
 
   //Question 3 Five Star Ratings of user 372233
 
-  //println(testData.filter('userid === 372233 && 'rating === 5).count())
+  println(testData.filter('userid === 372233 && 'rating === 5).count())
 
   //Question 4 Movie with most user ratings
-  //val maxMovie = testData.groupBy('movieid).count.orderBy(desc("count")).limit(1)
-  //maxMovie.join(movies, "movieid").show(false)
+  val maxMovie = testData.groupBy('movieid).count.orderBy(desc("count")).limit(1)
+  maxMovie.join(movies, "movieid").show(false)
 
   //Question 5 Movie with most 5 star ratings
 
-  //val fiveMovie = testData.filter('rating === 5).groupBy('movieid).count.orderBy(desc("count")).limit(1)
-  //fiveMovie.join(movies, "movieid").show(false)
+  val fiveMovie = testData.filter('rating === 5).groupBy('movieid).count.orderBy(desc("count")).limit(1)
+  fiveMovie.join(movies, "movieid").show(false)
 
 //OUT OF CLASS
 
  //Part 1
- val data = rating.filter($"userid" <= 100000 && $"movieid" <= 5000)
+/* val data = rating.filter($"userid" <= 100000 && $"movieid" <= 5000)
  
  val als = new ALS()
               .setImplicitPrefs(false)
@@ -87,7 +92,12 @@ object SparkRecommend extends App {
   val detuple = udf{(r:Row)  => r.getInt(0)}
 
 
-  recommendations.withColumn("recommendations", explode(col("recommendations"))).withColumn("movies", detuple(col("recommendations"))).groupBy('recommendations).count.orderBy(desc("count")).limit(10).join(movies, recommendations.col("movies") === movies.col("movieid")).show(false)
+  recommendations.withColumn("recommendations", explode(col("recommendations")))
+  	.withColumn("movieid", detuple(col("recommendations")))
+	.groupBy('movieid).count.orderBy(desc("count"))
+	.limit(10)
+	.join(movies, "movieid")
+	.show(false)
 
   //Part 2
   val evaluator = new RegressionEvaluator()
@@ -102,6 +112,6 @@ object SparkRecommend extends App {
   val predictions = testModel.transform(test)
   val rmse = evaluator.evaluate(predictions)
   println(s"Root-mean-square error = $rmse")
- 
+ */
 spark.stop
 }
