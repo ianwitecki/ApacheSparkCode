@@ -30,7 +30,7 @@
 		| 3895     | 3217   | 1956         |   The Man Who Never Was                          |
 		| 1109     | 3215   | 1964         |   My Fair Lady: Special Edition: Bonus Material  |
 		| 3924     | 2908   | 1970         |   White Sun of the Desert                        |
-		| 3019     | 2878   | 1990         |   Warren Miller's Journey                        |
+		| 3019     | 2878   | 1990         |   Warren Millers Journey                         |
 		| 1396     | 2786   | 2004         |   Kaleido Star                                   |
 		| 1753     | 2363   | 2004         |   Making Marines                                 |
 		| 3636     | 2335   | 2005         |   The Work of Director Mark Romanek              |
