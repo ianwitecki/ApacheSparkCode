@@ -23,18 +23,18 @@
 
    1.Below are the top 10 movie recommendations. 
 
-		| movieid  | count  | releaseYear  |   title                                          |
-		|----------|--------|--------------|--------------------------------------------------|
-		| 2879     | 6904   | 2004         |   Boz Scaggs: Greatest Hits Live                 |
-		| 2393     | 5028   | 1980         |   The Blues Brothers: Theatrical Cut             |
-		| 3895     | 3217   | 1956         |   The Man Who Never Was                          |
-		| 1109     | 3215   | 1964         |   My Fair Lady: Special Edition: Bonus Material  |
-		| 3924     | 2908   | 1970         |   White Sun of the Desert                        |
-		| 3019     | 2878   | 1990         |   Warren Millers Journey                         |
-		| 1396     | 2786   | 2004         |   Kaleido Star                                   |
-		| 1753     | 2363   | 2004         |   Making Marines                                 |
-		| 3636     | 2335   | 2005         |   The Work of Director Mark Romanek              |
-		| 4028     | 2229   | 2004         |   Russell Simmons Presents Def Poetry: Season 2  |
+		| movieid  | count  | releaseYear  | title                                          |
+		|----------|--------|--------------|------------------------------------------------|
+		| 2879     | 6904   | 2004         | Boz Scaggs: Greatest Hits Live                 |
+		| 2393     | 5028   | 1980         | The Blues Brothers: Theatrical Cut             |
+		| 3895     | 3217   | 1956         | The Man Who Never Was                          |
+		| 1109     | 3215   | 1964         | My Fair Lady: Special Edition: Bonus Material  |
+		| 3924     | 2908   | 1970         | White Sun of the Desert                        |
+		| 3019     | 2878   | 1990         | Warren Miller's Journey                        |
+		| 1396     | 2786   | 2004         | Kaleido Star                                   |
+		| 1753     | 2363   | 2004         | Making Marines                                 |
+		| 3636     | 2335   | 2005         | The Work of Director Mark Romanek              |
+		| 4028     | 2229   | 2004         | Russell Simmons Presents Def Poetry: Season 2  |
 
 1. The evaluator says that the Root-mean-sqaure deviation is 0.9119479542506134
 
