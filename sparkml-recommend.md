@@ -36,7 +36,7 @@
 		| 3636     | 2335   | 2005         | The Work of Director Mark Romanek              |
 		| 4028     | 2229   | 2004         | Russell Simmons Presents Def Poetry: Season 2  |
 
-1. The evaluator says that the Root-mean-sqaure deviation is 0.9119479542506134
+1. The evaluator says that the Root-mean-sqaure deviation is 0.9119479542506134.
 
 
 
