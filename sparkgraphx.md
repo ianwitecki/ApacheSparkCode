@@ -1,11 +1,12 @@
-# Spark Recommendation Assignment  
+# Spark GraphX Assignment  
 
 ## In Class Questions
-1. The user Ids range from 6 to 2649429.
-1. There are 404,555 distinct user ids.
-1. User 372233 has given 15 five star ratings.
-1. The movie American Beauty has the most user ratings with 154,832 user rating.
-1. The movie American Beauty has the most 4 star ratings with 57,537 ratings.
+1. There are  distinct descriptor names.
+1. The 10 most common descriptor names are .
+1. The 10 most common descriptor names in major topics are .
+1. Theoretically could be  pairs.
+1. There are  actual pairs.
+1. The graph of pair terms should not be directed becuase there will never be case where a descriptor has an ed    ge to another descriptor, but there is no edge from that the destination descriptor back. This implies that our gra    ph is only interested in how related different descriptors are to each other.
 
 
 ## Out of Class Questions

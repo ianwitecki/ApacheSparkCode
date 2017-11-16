@@ -3,6 +3,7 @@ package sparkgraphx
 
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD
 import org.apache.spark.graphx.Edge
 import org.apache.spark.graphx.Graph
 import org.apache.spark.graphx.lib.ShortestPaths
@@ -24,70 +25,75 @@ import swiftvis2.plotting.renderer.FXRenderer
 
 
 
-object MedSet extends JFXApp {
+object MedSet extends App {
 
  Logger.getLogger("org").setLevel(Level.OFF)
 
 
- val conf = new SparkConf().setAppName("Graph Application").setMaster("local[*]")
+ val conf = new SparkConf().setAppName("Graph App").setMaster("local[*]")
  val sc = new SparkContext(conf)
- sc.setLogLevel("WARN")
 
-	val cits = descriptorReader("/data/BigData/Medline/medsamp2016a.xml")
-	//var citationNodes = cits
+//	val cits = descriptorReader("/data/BigData/Medline/medsamp2016a.xml")
+//	var citationNodes = cits
 
-	/*for (i <- 'b' to 'c') {
-		citationNodes = citationNodes ++ descriptorReader("/data/BigData/Medline/medsamp2016" + i + ".xml") 
-	}*/
+//	for (i <- 'b' to 'h') {
+//		citationNodes = citationNodes ++ descriptorReader("/data/BigData/Medline/medsamp2016" + i + ".xml") 
+//	}
 
-	val citationNodes = cits ++ descriptorReader("/data/BigData/Medline/medsamp2016" + "b" + ".xml") ++ descriptorReader("/data/BigData/Medline/medsamp2016" + "c" + ".xml") 
+	println("Parse \n")
+
+	val citationNodes =  descriptorReader("/data/BigData/Medline/medsamp2016a.xml") ++ descriptorReader("/data/BigData/Medline/medsamp2016" + "b" + ".xml") ++ descriptorReader("/data/BigData/Medline/medsamp2016" + "c" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "d" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "e" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "f" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "g" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "h" + ".xml") 
 	//IN CLASS CODE
 
-	val majorKeys = citationNodes.flatten.filter(n => (n \ "@MajorTopicYN").toString == "Y").map(_.text)
-	val citationSeq = citationNodes.flatten.map(_.text)
+	println("Code Parsed \n")
+
+
+	//val majorKeys = citationNodes.flatten.filter(n => (n \ "@MajorTopicYN").toString == "Y").map(_.text).distinct
+	val citationSeq = citationNodes.map(_._1).distinct
+
+	citationSeq.take(5) foreach println
 
 	//Problem 1
 	println("Number of Descriptors")
-	val count = citationSeq.distinct.count(_ => true)
+	val count = citationSeq.count(_ => true)
 	println(count)
-/*
-	//Problem 2
-	println("All Descriptors")
+
+/*	//Problem 2
+	println("\n All Descriptors")
 	val citRDD = sc.parallelize(citationSeq)
 	val countMap = citRDD.countByValue.toSeq
 	sc.parallelize(countMap).sortBy(_._2, ascending=false).take(10) foreach println
-
+*/
 	//Problem 3
-	println("Major Topics")
+	/*println("\n Major Topics")
 	val majorKeyRDD = sc.parallelize(majorKeys)
 	val countMap1 = majorKeyRDD.countByValue.toSeq
 	sc.parallelize(countMap1).sortBy(_._2, ascending=false).take(10) foreach println
-
-	//Problem 4
-	println("Math: Number of Pairs")
-	println((count * (count - 1)) / 2)
 */
+	//Problem 4
+	println("\n Math: Number of Pairs")
+	println((count * (count - 1)) / 2)
+
 
 	//Problem 5
-	val citPairSeq = sc.parallelize(citationNodes.map(seq => seq.map(node => node.text)))
+	println("\n Number of Pairs")
+	/*val pairSeq = sc.parallelize(citationNodes.map(seq => seq.map(node => node._1)))
 	.flatMap{seq =>
 		seq.combinations(2)
 	}
-	citPairSeq.take(10) foreach println
-	println(citPairSeq.distinct.count())
+	println(pairSeq.distinct.count())*/
 
-
-	/*println("Number of Pairs")
-	val citEdges = citRDD.flatMap(citation => citation.combinations(2))
-	println(citEdges.count)*/
-
-	//Problem 6
-	/* The graph of pair terms should not be directed becuase there will never be case where a descriptor has an edge to another descriptor, but there is no edge from that the destination descriptor back. This implies that our graph is only interested in how related different descriptors are to each other*/
 
 	// OUT OF CLASS CODE 
+/*
+	def graphAssignment(allNodes: Boolean):Unit = {
+
 	
-	//ALL DESCRIPTORS
-	val regNodeIndexPairs = citationSeq.distinct.zipWithIndex.map { case (n, i) => i.toLong -> n }
+	val regNodeIndexPairs = assignNodes(allNodes)
+	
+	val citPairSeq = assignPairs(allNodes) 
+
+	
 
 	val indexMap = regNodeIndexPairs.map { case (i, n) => n -> i }.toMap
 
@@ -101,15 +107,13 @@ object MedSet extends JFXApp {
 	val	regNodeRDD = sc.parallelize(regNodeIndexPairs)
 	val regGraph = Graph(regNodeRDD, regEdgePairs)
 
-	println(regGraph.numVertices)
-
 	// Connected Components
 	println("Connected Components \n")
-//	println(regGraph.connectedComponents().vertices.map(_._2).distinct.count())
+	println(regGraph.connectedComponents().vertices.map(_._2).distinct.count())
 
 	//Top Words By Page Rank
 	println("Page Rank \n")
-//	regGraph.pageRank(0.01).vertices.sortBy(_._2, ascending = false).take(10).map(a => (a._2, regNodeIndexPairs((a._1).toInt))) foreach println
+	regGraph.pageRank(0.01).vertices.sortBy(_._2, ascending = false).take(10).map(a => (a._2, regNodeIndexPairs((a._1).toInt))) foreach println
 
 	//  Degree Distribution
 	println("Degree Distribution \n")
@@ -130,7 +134,7 @@ object MedSet extends JFXApp {
 
 
 	//	Shortest Path
-/*
+
 	val pregnancySP = ShortestPaths.run(regGraph, Seq(indexMap("Esophagus")))
     println(pregnancySP.vertices.filter(_._1==indexMap("Pregnancy")).first)
 
@@ -140,13 +144,51 @@ object MedSet extends JFXApp {
 
 	val taxesSP = ShortestPaths.run(regGraph, Seq(indexMap("Taxes")))
     println(taxesSP.vertices.filter(_._1==indexMap("Guinea Pigs")).first)
-*/
-	//MAJOR DESCRIPTORS
 
-def descriptorReader(path: String): Seq[NodeSeq] = {
+	}
+
+	def assignNodes(all: Boolean) : Seq[(Long, String)] = {
+		if (all) {
+			citationSeq.distinct.zipWithIndex.map { case (n, i) => i.toLong -> n }
+		} else {
+			majorKeys.distinct.zipWithIndex.map { case (n, i) => i.toLong -> n }
+		}
+	}
+
+	def assignPairs(all: Boolean) : RDD[Seq[String]] = {
+
+	if (all) {
+		sc.parallelize(citationNodes.map(seq => seq.map(node => node.text)))
+		.flatMap{seq =>
+		seq.combinations(2)
+		}
+
+	} else {
+		 sc.parallelize(citationNodes.map{seq => 
+			seq.filter{n => 
+				(n \ "@MajorTopicYN").toString == "Y"
+				}
+				.map(node => node.text)
+			}
+		)
+		.flatMap{seq =>
+		seq.combinations(2)
+		}
+	}
+	}
+*/
+def descriptorReader(path: String): Seq[(String, String)] = {
 	val parsed = xml.XML.loadFile(path)
-	val cit = (parsed \ "MedlineCitation").map(x => (x \\ "DescriptorName"))
-	return cit
+/*	val cit = (parsed \ "MedlineCitation").map(x => (x \\ "DescriptorName")).map{seq => 
+	            seq.map{n => 
+	                 (n.text, (n \ "@MajorTopicYN").toString)
+	                }
+             }*/
+	val cit = (parsed \ "MedlineCitation" \\ "DescriptorName").map{ n => 
+	                 (n.text, (n \ "@MajorTopicYN").toString)
+	                }
+	cit
+
 }
 
 sc.stop
