@@ -25,12 +25,12 @@ import swiftvis2.plotting.renderer.FXRenderer
 
 
 
-object MedSet extends App {
+object MedSet extends JFXApp {
 
  Logger.getLogger("org").setLevel(Level.OFF)
 
 
- val conf = new SparkConf().setAppName("Graph App").setMaster("local[*]")
+ val conf = new SparkConf().setAppName("Graph App").setMaster("spark://pandora00:7077")
  val sc = new SparkContext(conf)
 
 //	val cits = descriptorReader("/data/BigData/Medline/medsamp2016a.xml")
@@ -42,30 +42,30 @@ object MedSet extends App {
 
 	println("Parse \n")
 
-	val citationNodes =  descriptorReader("/data/BigData/Medline/medsamp2016a.xml") ++ descriptorReader("/data/BigData/Medline/medsamp2016" + "b" + ".xml") ++ descriptorReader("/data/BigData/Medline/medsamp2016" + "c" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "d" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "e" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "f" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "g" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "h" + ".xml") 
+	//val citationNodes =  descriptorReader("/data/BigData/Medline/medsamp2016a.xml") ++ descriptorReader("/data/BigData/Medline/medsamp2016" + "b" + ".xml") ++ descriptorReader("/data/BigData/Medline/medsamp2016" + "c" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "d" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "e" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "f" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "g" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "h" + ".xml") 
 
 
-	//val majorNodes =  majorReader("/data/BigData/Medline/medsamp2016a.xml") ++ majorReader("/data/BigData/Medline/medsamp2016" + "b" + ".xml") ++ majorReader("/data/BigData/Medline/medsamp2016" + "c" + ".xml")	++ majorReader("/data/BigData/Medline/medsamp2016" + "d" + ".xml")	++ majorReader("/data/BigData/Medline/medsamp2016" + "e" + ".xml")	++ majorReader("/data/BigData/Medline/medsamp2016" + "f" + ".xml")	++ majorReader("/data/BigData/Medline/medsamp2016" + "g" + ".xml")	++ majorReader("/data/BigData/Medline/medsamp2016" + "h" + ".xml") 
+	val majorNodes =  majorReader("/data/BigData/Medline/medsamp2016a.xml") ++ majorReader("/data/BigData/Medline/medsamp2016" + "b" + ".xml") ++ majorReader("/data/BigData/Medline/medsamp2016" + "c" + ".xml")	++ majorReader("/data/BigData/Medline/medsamp2016" + "d" + ".xml")	++ majorReader("/data/BigData/Medline/medsamp2016" + "e" + ".xml")	++ majorReader("/data/BigData/Medline/medsamp2016" + "f" + ".xml")	++ majorReader("/data/BigData/Medline/medsamp2016" + "g" + ".xml")	++ majorReader("/data/BigData/Medline/medsamp2016" + "h" + ".xml") 
 	
-	val majorNodes = citationNodes.take(1)
-	//val citationNodes = majorNodes.take(1)
+	//val majorNodes = citationNodes.take(1)
+	val citationNodes = majorNodes.take(1)
 
 	//IN CLASS CODE
 
 	println("Code Parsed \n")
 
 
-	//val majorKeys = majorNodes.flatten
-	//val citationSeq = majorKeys.take(10)
+	val majorKeys = majorNodes.flatten.distinct
+	val citationSeq = majorKeys.take(10)
 
-	val citationSeq = citationNodes.flatten.distinct
-	val majorKeys = citationSeq.take(10)
+	//val citationSeq = citationNodes.flatten.distinct
+	//val majorKeys = citationSeq.take(10)
 
 
 	//Problem 1
 	println("Number of Descriptors")
-	val count = citationSeq.count(_ => true)
-//	val count = majorKeys.count(_ => true)
+	//val count = citationSeq.count(_ => true)
+	val count = majorKeys.count(_ => true)
 	println(count)
 
 	//Problem 2
@@ -96,8 +96,8 @@ object MedSet extends App {
 
 	// OUT OF CLASS CODE 
 
-	graphAssignment(true);
-	//graphAssignment(false);
+	//graphAssignment(true);
+	graphAssignment(false);
 
 	def graphAssignment(allNodes: Boolean):Unit = {
 
@@ -122,16 +122,15 @@ object MedSet extends App {
 
 	// Connected Components
 	println("Connected Components \n")
-//	println(regGraph.connectedComponents().vertices.map(_._2).distinct.count())
-	println(regGraph.connectedComponents().vertices.map(_._2).countByValue())
+	regGraph.connectedComponents().vertices.map(_._2).countByValue().map(_._2) foreach println
 
 	//Top Words By Page Rank
 	println("Page Rank \n")
-	regGraph.pageRank(0.01).vertices.sortBy(_._2, ascending = false).take(10).map(a => (a._2, regNodeIndexPairs((a._1).toInt))) foreach println
+//	regGraph.pageRank(0.01).vertices.sortBy(_._2, ascending = false).take(10).map(a => (a._2, regNodeIndexPairs((a._1).toInt))) foreach println
 
 	//  Degree Distribution
 	println("Degree Distribution \n")
-	val degreeDist = regGraph.degrees.sortBy(_._1)
+/*	val degreeDist = regGraph.degrees.sortBy(_._1)
 
 //	val bins = degreeDist.map(a => (a._1).toDouble).collect()
 	println(count)
@@ -145,10 +144,10 @@ object MedSet extends App {
     val hist = degreeDist.map(_._2.toDouble).histogram(y, true)
     val plot = Plot.histogramPlot(bins, hist, RedARGB, true, "Degree Distribution of All Descriptors", "Vertex", "Degree Distribution")
      FXRenderer(plot)
-
+*/
 
 	//	Shortest Path
-
+/*
 	val pregnancySP = ShortestPaths.run(regGraph, Seq(indexMap("Esophagus")))
     println(pregnancySP.vertices.filter(_._1==indexMap("Pregnancy")).first)
 
@@ -158,7 +157,7 @@ object MedSet extends App {
 
 	val taxesSP = ShortestPaths.run(regGraph, Seq(indexMap("Taxes")))
     println(taxesSP.vertices.filter(_._1==indexMap("Guinea Pigs")).first)
-
+*/
 	}
 
 	def assignNodes(all: Boolean) : Seq[(Long, String)] = {

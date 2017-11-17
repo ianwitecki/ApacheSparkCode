@@ -41,6 +41,206 @@
 
 ## All Descriptors
 
-1.
+1. There are two connected components. Component 0 has 22,546 nodes and Component 1 has 1 node.
+1. The top words by page rank are: 
+|Page Rank        | Descriptor       |
+|-----------------|------------------|
+|109.132		  | Humans			 |
+|78.1916	      |	Animals			 |
+|76.2472          | Female			 |
+|76.2188		  |	Male			 |
+|58.2823	 	  |	Adult			 |
+|51.6020		  |	Middle Aged		 |
+|41.9215		  |	Aged			 |
+|39.5861		  |	Adolescent		 |
+|37.8576		  |	Time Factors	 |
+|37.8156	 	  |	Child			 |
+
+1. The following is histogram of the degree distribution for all nodes:
+
+	![alt text](/images/degDist)
+
+1. Shortest Path
+	1. 1 apart
+	1. 2 apart
+	1. 2 apart
+
+
+## Major Topic Descriptors
+
+1. There are two connected components. Component 0 has 22,546 nodes and Component 1 has 1 node.
+1. The top words by page rank are: 
+|Page Rank        | Descriptor       	|
+|-----------------|---------------------|
+|72.2580		  | Research			|
+|50.2305      	  |	Disease			 	|
+|34.5911          | Neoplasms			|
+|26.0305		  | Blood				|
+|24.5881		  | Pharmacology     	|
+|22.2252	      | Tuberculosis     	|
+|19.5722          | Drug Therapy		|
+|19.4702		  | Toxicology			|
+|17.3685	      | Plants				|
+|16.7228          | Biomedical Research |
+
+1. The following is histogram of the degree distribution for all nodes:
+
+	![alt text](/images/degDistMajor)
+
+1. Shortest Path
+	1. 2 apart
+	1. 2 apart
+	1. 3 apart
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
