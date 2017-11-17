@@ -43,41 +43,51 @@ object MedSet extends App {
 	println("Parse \n")
 
 	val citationNodes =  descriptorReader("/data/BigData/Medline/medsamp2016a.xml") ++ descriptorReader("/data/BigData/Medline/medsamp2016" + "b" + ".xml") ++ descriptorReader("/data/BigData/Medline/medsamp2016" + "c" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "d" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "e" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "f" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "g" + ".xml")	++ descriptorReader("/data/BigData/Medline/medsamp2016" + "h" + ".xml") 
+
+
+	//val majorNodes =  majorReader("/data/BigData/Medline/medsamp2016a.xml") ++ majorReader("/data/BigData/Medline/medsamp2016" + "b" + ".xml") ++ majorReader("/data/BigData/Medline/medsamp2016" + "c" + ".xml")	++ majorReader("/data/BigData/Medline/medsamp2016" + "d" + ".xml")	++ majorReader("/data/BigData/Medline/medsamp2016" + "e" + ".xml")	++ majorReader("/data/BigData/Medline/medsamp2016" + "f" + ".xml")	++ majorReader("/data/BigData/Medline/medsamp2016" + "g" + ".xml")	++ majorReader("/data/BigData/Medline/medsamp2016" + "h" + ".xml") 
+	
+	val majorNodes = citationNodes.take(1)
+	//val citationNodes = majorNodes.take(1)
+
 	//IN CLASS CODE
 
 	println("Code Parsed \n")
 
 
-	//val majorKeys = citationNodes.flatten.filter(n => (n \ "@MajorTopicYN").toString == "Y").map(_.text).distinct
-	val citationSeq = citationNodes.map(_._1).distinct
+	//val majorKeys = majorNodes.flatten
+	//val citationSeq = majorKeys.take(10)
 
-	citationSeq.take(5) foreach println
+	val citationSeq = citationNodes.flatten.distinct
+	val majorKeys = citationSeq.take(10)
+
 
 	//Problem 1
 	println("Number of Descriptors")
 	val count = citationSeq.count(_ => true)
+//	val count = majorKeys.count(_ => true)
 	println(count)
 
-/*	//Problem 2
-	println("\n All Descriptors")
+	//Problem 2
+	/*println("\n All Descriptors")
 	val citRDD = sc.parallelize(citationSeq)
 	val countMap = citRDD.countByValue.toSeq
 	sc.parallelize(countMap).sortBy(_._2, ascending=false).take(10) foreach println
 */
 	//Problem 3
-	/*println("\n Major Topics")
+/*	println("\n Major Topics")
 	val majorKeyRDD = sc.parallelize(majorKeys)
 	val countMap1 = majorKeyRDD.countByValue.toSeq
 	sc.parallelize(countMap1).sortBy(_._2, ascending=false).take(10) foreach println
 */
 	//Problem 4
-	println("\n Math: Number of Pairs")
+/*	println("\n Math: Number of Pairs")
 	println((count * (count - 1)) / 2)
-
+*/
 
 	//Problem 5
-	println("\n Number of Pairs")
-	/*val pairSeq = sc.parallelize(citationNodes.map(seq => seq.map(node => node._1)))
+/*	println("\n Number of Pairs")
+	val pairSeq = sc.parallelize(citationNodes)
 	.flatMap{seq =>
 		seq.combinations(2)
 	}
@@ -85,7 +95,10 @@ object MedSet extends App {
 
 
 	// OUT OF CLASS CODE 
-/*
+
+	graphAssignment(true);
+	//graphAssignment(false);
+
 	def graphAssignment(allNodes: Boolean):Unit = {
 
 	
@@ -109,7 +122,8 @@ object MedSet extends App {
 
 	// Connected Components
 	println("Connected Components \n")
-	println(regGraph.connectedComponents().vertices.map(_._2).distinct.count())
+//	println(regGraph.connectedComponents().vertices.map(_._2).distinct.count())
+	println(regGraph.connectedComponents().vertices.map(_._2).countByValue())
 
 	//Top Words By Page Rank
 	println("Page Rank \n")
@@ -158,35 +172,39 @@ object MedSet extends App {
 	def assignPairs(all: Boolean) : RDD[Seq[String]] = {
 
 	if (all) {
-		sc.parallelize(citationNodes.map(seq => seq.map(node => node.text)))
+		sc.parallelize(citationNodes)
 		.flatMap{seq =>
 		seq.combinations(2)
 		}
 
 	} else {
-		 sc.parallelize(citationNodes.map{seq => 
-			seq.filter{n => 
-				(n \ "@MajorTopicYN").toString == "Y"
-				}
-				.map(node => node.text)
-			}
-		)
+		 sc.parallelize(majorNodes)
 		.flatMap{seq =>
 		seq.combinations(2)
 		}
 	}
 	}
-*/
-def descriptorReader(path: String): Seq[(String, String)] = {
+
+def descriptorReader(path: String): Seq[Seq[String]] = {
 	val parsed = xml.XML.loadFile(path)
-/*	val cit = (parsed \ "MedlineCitation").map(x => (x \\ "DescriptorName")).map{seq => 
+	val cit = (parsed \ "MedlineCitation").map(x => (x \\ "DescriptorName").map( n => n.text))
+	/*{seq => 
 	            seq.map{n => 
 	                 (n.text, (n \ "@MajorTopicYN").toString)
 	                }
              }*/
-	val cit = (parsed \ "MedlineCitation" \\ "DescriptorName").map{ n => 
+	/*val cit = (parsed \ "MedlineCitation" \\ "DescriptorName").map{ n => 
 	                 (n.text, (n \ "@MajorTopicYN").toString)
-	                }
+	                }*/
+	cit
+
+}
+
+
+def majorReader(path: String): Seq[Seq[String]] = {
+	val parsed = xml.XML.loadFile(path)
+	val cit = (parsed \ "MedlineCitation").map(x => (x \\ "DescriptorName")
+	.filter(n => (n \ "@MajorTopicYN").toString == "Y").map( n => n.text))
 	cit
 
 }
