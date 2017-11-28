@@ -122,7 +122,13 @@ object MedSet extends JFXApp {
 
 	// Connected Components
 	println("Connected Components \n")
-	regGraph.connectedComponents().vertices.map(_._2).countByValue().map(_._2) foreach println
+
+	val connected = regGraph.connectedComponents().vertices.map(_._2).countByValue().map(_._2)
+	
+	println("Connected Components Count")
+	println(connected.count(_ => true))
+	println("Connected Components")
+	connected.toArray.map(_.toInt).sortWith((a,b) => a > b).take(20) foreach println
 
 	//Top Words By Page Rank
 	println("Page Rank \n")
