@@ -41,7 +41,7 @@
 
 ## All Descriptors
 
-1. There are 878 connected components. One component has 13,610 nodes and the rest have under 5 nodes. 
+1. There are two connected components. Component 0 has 22,546 nodes and Component 1 has 1 node.
 
 1. The top words by page rank are: 
 
@@ -70,7 +70,7 @@
 
 ## Major Topic Descriptors
 
-1. There are two connected components. Component 0 has 22,546 nodes and Component 1 has 1 node.
+1. There are 878 connected components. One component has 13,610 nodes and the rest have under 5 nodes. 
 1. The top words by page rank are: 
 
 | Page Rank       | Descriptor       	|

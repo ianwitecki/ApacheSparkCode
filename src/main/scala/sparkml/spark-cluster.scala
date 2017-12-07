@@ -16,13 +16,27 @@ import org.apache.spark.ml.linalg.{Matrix, Vectors}
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
 import org.apache.log4j.Logger
 import org.apache.log4j.Level
+import scalafx.application.JFXApp
+//import scalafx.Includes._
+import scalafx.scene.Scene
+import scalafx.scene.chart.ScatterChart
+import scalafx.scene.chart.NumberAxis
+import scalafx.scene.chart.XYChart
+import scalafx.scene.layout.TilePane
+import scalafx.collections.ObservableBuffer
+import swiftvis2.plotting._
+import swiftvis2.plotting.renderer.FXRenderer
+import org.apache.spark.sql.types._
+import org.apache.spark.sql.functions._
+
+
 
 
 
 /**
  * Clustering on the BRFSS data set. https://www.cdc.gov/brfss/
  */
-object SparkCluster extends App {
+object SparkCluster extends JFXApp {
 
   Logger.getLogger("org").setLevel(Level.OFF)
 
@@ -35,10 +49,23 @@ object SparkCluster extends App {
 
   val electionData = spark.read.option("header", true).csv("/data/BigData/bls/2016_US_County_Level_Presidential_Results.csv")
 
+    val schemaZip = StructType(Array(
+        StructField("zip", StringType),
+        StructField("lat", DoubleType),
+        StructField("long", DoubleType),
+        StructField("city", StringType),
+        StructField("state", StringType),
+        StructField("county", StringType)
+    ))
+
+ val zipCode = spark.read.schema(schemaZip).option("header", true).option("delimiter", ",").csv("/data/BigData/bls/zip_codes_states.csv")
+  val zips = zipCode.groupBy('county, 'state).agg(avg('lat) as "lat" , avg('long) as "long")
+
+
   val electionCounties = electionData.filter('county_name =!= "Alaska").withColumn("county", electionData.col("combined_fips").cast(IntegerType))
     .drop("combined_fips")
     .withColumnRenamed("county", "combined_fips")
-    .select('combined_fips, 'per_dem)
+    .select('state_abbr, 'county_name, 'combined_fips, 'per_dem)
 
   
 
@@ -88,7 +115,7 @@ object SparkCluster extends App {
 
   val clusterData = data.join(electionCounties, data.col("area_fips") === electionCounties.col("combined_fips")).na.drop
 
-  val columnsToKeep = ("avg_wkly_wage month1_emplvl month2_emplvl month3_emplvl qtrly_contributions lq_qtrly_estabs").split(" ")
+  val columnsToKeep = ("industry_code avg_wkly_wage month1_emplvl month2_emplvl month3_emplvl qtrly_contributions lq_qtrly_estabs").split(" ")
 
   //clusterData.show(20)
 
@@ -120,25 +147,48 @@ object SparkCluster extends App {
   println("Total Right = " +  (totalCorrect.toDouble / total.toDouble))
 
   
-  val kmeansTri = new KMeans().setK(3).setFeaturesCol("normFeatures")
-  val modelTri = kmeans.fit(normData)
+/*  val kmeansTri = new KMeans().setK(3).setFeaturesCol("normFeatures")
+  val modelTri = kmeansTri.fit(normData)
 
-  val predictionsTri = model.transform(normData)
+  val predictionsTri = modelTri.transform(normData)
 
-  val areaToPredictionTri = predictionsTri.groupBy('area_fips).avg("prediction").withColumn("guess", when($"avg(prediction)" < 0.7, 0).when($"avg(prediction)" < 1.3 && $"avg(prediction)" >= 0.7, 2).otherwise(3))
+  predictionsTri.select("prediction").show(30)
+
+  predictionsTri.agg(countDistinct("prediction")).show()
+
+
+  val areaToPredictionTri = predictionsTri.groupBy('area_fips).avg("prediction").withColumn("guess", when($"avg(prediction)" < 0.7, 0).when($"avg(prediction)" < 1.3 && $"avg(prediction)" >= 0.7, 1).otherwise(2))
 
   val answerCheckTri = areaToPredictionTri.join(electionCounties, data.col("area_fips") === electionCounties.col("combined_fips"))
-    .withColumn("real", when('per_dem < 0.7, 0).when('per_dem < 1.3 && 'per_dem >= 0.7, 2).otherwise(3))
+    .withColumn("real", when('per_dem < 0.35, 0).when('per_dem < 0.65 && 'per_dem >= 0.35, 1).otherwise(2))
+
+  answerCheckTri.show(20)
 
   val totalTri = answerCheckTri.count()
   println("Total 3 Cluster= " + totalTri)
   val totalCorrectTri = answerCheckTri.filter('guess === 'real).count()
-  println("Total Right 3 Cluster = " +  (totalCorrectTri.toDouble / totalTri.toDouble))
+  println("Total Right 3 Cluster = " +  (totalCorrectTri.toDouble / totalTri.toDouble)) */
 
     // Question 2
+    
+    val myUdf = udf{(s:String) => s.split(" ").dropRight(1).mkString(" ").trim}
+    
 
-  
+    
+    // Graph for two clusters
+    val g2 = answerCheck.withColumn("county", myUdf(col("county_name")))
+    g2.show(20)
+    val graph2 = g2.select('state_abbr, 'county_name, 'guess, 'county)
+        .join(zips, g2("county") === zips("county") && g2("state_abbr") === zips("state"))
+    graph2.show(20)
 
+    val long2 = graph2.select('long).map(r => r(0).asInstanceOf[Double]).collect
+    val lat2 = graph2.select('lat).map(r => r(0).asInstanceOf[Double]).collect
+    val point2 = graph2.select('guess).map(r => r(0).asInstanceOf[Double]).collect
+
+    val cg2 = ColorGradient((0.0, BlueARGB), (1.0, RedARGB))
+    val plotScatter = Plot.scatterPlot(long2, lat2, "Two Cluster Votes", "Latitude", "Longitude", 2.0, point2.map(guess => cg2(guess)))
+    FXRenderer(plotScatter)
 
   spark.stop()
 }
