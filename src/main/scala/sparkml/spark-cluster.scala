@@ -113,9 +113,9 @@ object SparkCluster extends JFXApp {
 
 
 
-  val clusterData = data.join(electionCounties, data.col("area_fips") === electionCounties.col("combined_fips")).na.drop
+  val clusterData = data.join(electionCounties, data.col("area_fips") === electionCounties.col("combined_fips"))
 
-  val columnsToKeep = ("industry_code avg_wkly_wage month1_emplvl month2_emplvl month3_emplvl qtrly_contributions lq_qtrly_estabs").split(" ")
+  val columnsToKeep = ("avg_wkly_wage month1_emplvl month2_emplvl month3_emplvl qtrly_contributions lq_qtrly_estabs").split(" ")
 
   //clusterData.show(20)
 
@@ -137,9 +137,12 @@ object SparkCluster extends JFXApp {
   val predictions = model.transform(normData)
   predictions.select("features", "prediction").show()
 
-  val areaToPrediction = predictions.groupBy('area_fips).avg("prediction").withColumn("guess", when($"avg(prediction)" >= 0.5, 1).otherwise(0))
+  val areaToPrediction = predictions.groupBy('area_fips).avg("prediction").withColumn("guess", when($"avg(prediction)" > 0.5, 1.0).otherwise(0.0))
+    
+   println("prediction test")
+   areaToPrediction.filter($"avg(prediction)" > 0.5).show(30)
 
-  val answerCheck = areaToPrediction.join(electionCounties, data.col("area_fips") === electionCounties.col("combined_fips")).withColumn("real", when('per_dem >= 0.50, 1).otherwise(0))
+  val answerCheck = areaToPrediction.join(electionCounties, data.col("area_fips") === electionCounties.col("combined_fips")).withColumn("real", when('per_dem > 0.50, 1.0).otherwise(0.0))
 
   val total = answerCheck.count()
   println("Total = " + total)
@@ -160,7 +163,7 @@ object SparkCluster extends JFXApp {
   val areaToPredictionTri = predictionsTri.groupBy('area_fips).avg("prediction").withColumn("guess", when($"avg(prediction)" < 0.7, 0).when($"avg(prediction)" < 1.3 && $"avg(prediction)" >= 0.7, 1).otherwise(2))
 
   val answerCheckTri = areaToPredictionTri.join(electionCounties, data.col("area_fips") === electionCounties.col("combined_fips"))
-    .withColumn("real", when('per_dem < 0.35, 0).when('per_dem < 0.65 && 'per_dem >= 0.35, 1).otherwise(2))
+    .withColumn("real", when('per_dem < 0.4, 0).when('per_dem < 0.6 && 'per_dem >= 0.4, 1).otherwise(2))
 
   answerCheckTri.show(20)
 
@@ -174,20 +177,26 @@ object SparkCluster extends JFXApp {
     val myUdf = udf{(s:String) => s.split(" ").dropRight(1).mkString(" ").trim}
     
 
-    
     // Graph for two clusters
     val g2 = answerCheck.withColumn("county", myUdf(col("county_name")))
     g2.show(20)
     val graph2 = g2.select('state_abbr, 'county_name, 'guess, 'county)
         .join(zips, g2("county") === zips("county") && g2("state_abbr") === zips("state"))
+    println(graph2.count)
     graph2.show(20)
 
-    val long2 = graph2.select('long).map(r => r(0).asInstanceOf[Double]).collect
+    /*val long2 = graph2.select('long).map(r => r(0).asInstanceOf[Double]).collect
     val lat2 = graph2.select('lat).map(r => r(0).asInstanceOf[Double]).collect
-    val point2 = graph2.select('guess).map(r => r(0).asInstanceOf[Double]).collect
+    val point2 = graph2.select('guess).map(r => r(0).asInstanceOf[Double]).collect*/
 
-    val cg2 = ColorGradient((0.0, BlueARGB), (1.0, RedARGB))
-    val plotScatter = Plot.scatterPlot(long2, lat2, "Two Cluster Votes", "Latitude", "Longitude", 2.0, point2.map(guess => cg2(guess)))
+    val long2 = graph2.select('long).as[Double].collect()
+    val lat2 = graph2.select('lat).as[Double].collect()
+    val point2 = graph2.select('guess).as[Double].collect()
+    println(point2.count(_ => true));
+    println(point2.distinct.count(_ => true));
+
+    val cg2 = ColorGradient(0.0 -> BlueARGB, 1.0 -> RedARGB)
+    val plotScatter = Plot.scatterPlot(lat2, long2, "Two Cluster Votes", "Latitude", "Longitude", 2.0, point2.map(cg2))
     FXRenderer(plotScatter)
 
   spark.stop()
