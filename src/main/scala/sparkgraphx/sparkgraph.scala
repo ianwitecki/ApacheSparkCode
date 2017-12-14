@@ -110,14 +110,14 @@ object MedSet extends JFXApp {
 
 	val indexMap = regNodeIndexPairs.map { case (i, n) => n -> i }.toMap
 
-
 	val regEdgePairs = citPairSeq.distinct.flatMap{ list => 
 		Seq( Edge(indexMap(list(0)), indexMap(list(1)), ()), 
 			 Edge(indexMap(list(1)), indexMap(list(0)), ()))
 	}
 
-
 	val	regNodeRDD = sc.parallelize(regNodeIndexPairs)
+    
+
 	val regGraph = Graph(regNodeRDD, regEdgePairs)
 
 	// Connected Components
@@ -136,7 +136,7 @@ object MedSet extends JFXApp {
 
 	//  Degree Distribution
 	println("Degree Distribution \n")
-/*	val degreeDist = regGraph.degrees.sortBy(_._1)
+	val degreeDist = regGraph.degrees.sortBy(_._1)
 
 //	val bins = degreeDist.map(a => (a._1).toDouble).collect()
 	println(count)
@@ -150,10 +150,10 @@ object MedSet extends JFXApp {
     val hist = degreeDist.map(_._2.toDouble).histogram(y, true)
     val plot = Plot.histogramPlot(bins, hist, RedARGB, true, "Degree Distribution of All Descriptors", "Vertex", "Degree Distribution")
      FXRenderer(plot)
-*/
+
 
 	//	Shortest Path
-/*
+
 	val pregnancySP = ShortestPaths.run(regGraph, Seq(indexMap("Esophagus")))
     println(pregnancySP.vertices.filter(_._1==indexMap("Pregnancy")).first)
 
@@ -163,7 +163,7 @@ object MedSet extends JFXApp {
 
 	val taxesSP = ShortestPaths.run(regGraph, Seq(indexMap("Taxes")))
     println(taxesSP.vertices.filter(_._1==indexMap("Guinea Pigs")).first)
-*/
+
 	}
 
 	def assignNodes(all: Boolean) : Seq[(Long, String)] = {
@@ -193,14 +193,6 @@ object MedSet extends JFXApp {
 def descriptorReader(path: String): Seq[Seq[String]] = {
 	val parsed = xml.XML.loadFile(path)
 	val cit = (parsed \ "MedlineCitation").map(x => (x \\ "DescriptorName").map( n => n.text))
-	/*{seq => 
-	            seq.map{n => 
-	                 (n.text, (n \ "@MajorTopicYN").toString)
-	                }
-             }*/
-	/*val cit = (parsed \ "MedlineCitation" \\ "DescriptorName").map{ n => 
-	                 (n.text, (n \ "@MajorTopicYN").toString)
-	                }*/
 	cit
 
 }
