@@ -195,7 +195,7 @@ object ClimbProject extends JFXApp {
   val indexMap = nodes.map { case (i, n) => n -> i }.toMap
 
 
-  val edges = groupedClimbs.flatMap( seq => seq.combinations(2)).flatMap{ list =>
+  val edges = groupedClimbs.flatMap( seq => seq.combinations(2)).collect.flatMap{ list =>
 
         try { //Error thrown here from indexMap
             val a1 = indexMap(list(0))
@@ -219,7 +219,7 @@ object ClimbProject extends JFXApp {
   edges.take(10) foreach println 
 
 
-  val climbGraph = Graph(sc.parallelize(nodes), edges)
+  val climbGraph = Graph(sc.parallelize(nodes), sc.parallelize(edges))
 
   //Page Rank
   climbGraph.pageRank(0.01).vertices.sortBy(_._2, ascending = false).take(10).map(a => (a._2, nodesMap((a._1).toInt))) foreach println
